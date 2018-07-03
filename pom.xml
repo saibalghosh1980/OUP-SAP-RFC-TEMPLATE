@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.oup.sb.camel</groupId>
+	<artifactId>SapRfcTemplate</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>A Camel Spring Boot Route</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<spring.boot-version>1.5.14.RELEASE</spring.boot-version>
+		<spring-cloud.version>Edgware.SR3</spring-cloud.version>
+	</properties>
+	<repositories>
+		<repository>
+			<id>redhat-ga</id>
+			<name>redhat GA</name>
+			<url>https://maven.repository.redhat.com/ga/</url>
+		</repository>
+	</repositories>
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring Boot BOM -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- Camel BOM -->
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spring-boot-dependencies</artifactId>
+				<version>2.21.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- Spring Boot -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- <exclusions> <exclusion> <groupId>org.springframework.boot</groupId> 
+				<artifactId>spring-boot-starter-tomcat</artifactId> </exclusion> </exclusions> -->
+		</dependency>
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-undertow</artifactId> 
+			</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- Camel -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-stream-starter</artifactId>
+		</dependency>
+		<!-- SPRING CLOUD -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>1.4.4.RELEASE</version>
+		</dependency>
+		<!-- SPRING CLOUD ENDS HERE -->
+		<!-- JOOKLA CORE -->
+		<dependency>
+			<groupId>org.jolokia</groupId>
+			<artifactId>jolokia-core</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+		<!-- ///////////////////////////////////// -->
+		<!-- Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test-spring</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- ADDITIONAL DEPENDENCIES SPECFIC TO SAP -->
+		<dependency>
+			<groupId>org.fusesource</groupId>
+			<artifactId>camel-sap</artifactId>
+			<version>6.3.0.redhat-329</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.jco</groupId>
+			<artifactId>sapjco3</artifactId>
+			<version>3.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/saplib/sapjco3.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.idoc</groupId>
+			<artifactId>sapidoc3</artifactId>
+			<version>3.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/saplib/sapidoc3.jar</systemPath>
+		</dependency>
+		<!-- ////////////////////ADDITIONAL DEPENDENCIES SPECFIC TO SAP ENDS HERE/////////////////////////////////// -->
+	</dependencies>
+	<build>
+		<plugins>
+
+			<!-- <plugin> <artifactId>maven-antrun-plugin</artifactId> <version>1.8</version> 
+				<inherited>false</inherited> <executions> <execution> <id>generate-new-jar</id> 
+				<phase>repackage</phase> <configuration> <tasks> <ant antfile="buildall.xml"> 
+				<target name="CREATE_JAR" /> </ant> </tasks> </configuration> <goals> <goal>run</goal> 
+				</goals> </execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+				<version>${spring.boot-version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

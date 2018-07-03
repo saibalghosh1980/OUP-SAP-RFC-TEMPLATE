@@ -1,0 +1,14 @@
+mvn clean package -f pom-jenkins.xml
+java -Dloader.path="src/saplib/" -jar ./target/SapRfcTemplate-0.0.1-SNAPSHOT.jar
+
+java -Dloader.path="/saplibs/" -jar ./SapRfcTemplate-0.0.1-SNAPSHOT.jar
+
+
+docker run -i -t -P -v /home/saibal/code:/javainstaller saprfctemplate:latest /bin/bash
+
+docker run -i -t -P -e JAVA_HOME=/JAVA/jdk1.8.0_171 -e PATH=${JAVA_HOME}/bin:${PATH} saibalkumarghosh/ubuntuorajdk8latest:v1 /bin/bash
+
+
+docker run -i -t -P -e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/JAVA/jdk1.8.0_171/bin -e JAVA_HOME=/JAVA/jdk1.8.0_171 saibalkumarghosh/ubuntuorajdk8latest:v1 /bin/bash
+
+docker run --network=oup-docker-network -i -d -t -e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/JAVA/jdk1.8.0_171/bin -e JAVA_HOME=/JAVA/jdk1.8.0_171  --name saprfc saprfctemplate:latest 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<!-- Configures an Outbound SAP Connection -->
+	<!-- *** Please enter the connection property values for your environment 
+		*** -->
+	<!-- Configures the Inbound and Outbound SAP Connections -->
+	<bean
+		class="org.fusesource.camel.component.sap.SapConnectionConfiguration"
+		id="sap-configuration">
+		<property name="destinationDataStore">
+			<map>
+				<entry key="quickstartDest"
+					value-ref="quickstartDestinationData" />
+			</map>
+		</property>
+		<property name="serverDataStore">
+			<map>
+				<entry key="quickstartServer" value-ref="quickstartServerData" />
+			</map>
+		</property>
+	</bean>
+	<!-- Configures an Outbound SAP Connection -->
+	<!-- *** Please enter the connection property values for your environment 
+		*** -->
+	<bean
+		class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl"
+		id="quickstartDestinationData">
+		<!-- <property name="ashost" value="petteril.uk.oup.com" /> -->
+		<property name="ashost" value="betsgill.uk.oup.com" />
+		<property name="sysnr" value="00" />
+		<property name="client" value="030" />
+		<property name="user" value="R3DSPSSERV01" />
+		<property name="passwd" value="SpS_Oxf0rD01" />
+		<property name="lang" value="en" />
+	</bean>
+	<!-- Configures an Inbound SAP Connection -->
+	<!-- *** Please enter the connection property values for your environment 
+		** -->
+	<bean
+		class="org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl"
+		id="quickstartServerData">
+		<property name="gwhost" value="petteril.uk.oup.com" />
+		<property name="gwserv" value="sapgw00" />
+		<!-- The following property values should not be changed -->
+		<property name="progid" value="R3Q_BizTalk_ORB" />
+		<property name="repositoryDestination" value="quickstartDest" />
+		<property name="connectionCount" value="2" />
+	</bean>
+	<bean class="com.oup.sb.saprfc.ProcessRequest"
+		id="springManagedRequestProcesssor" />
+	<bean class="com.oup.sb.saprfc.ProcessResponse"
+		id="springManagedResponseProcesssor" />
+	<camelContext
+		id="camelContext-5cdff5e1-428b-4fc3-990a-b7fff92e2316"
+		xmlns="http://camel.apache.org/schema/spring">
+		<route id="_route1">
+			<from id="_from1"
+				uri="timer://foo?fixedRate=true&amp;period=60000" />
+			<log id="_log2" logName="com.oup.route" loggingLevel="INFO"
+				message="RANDOM LOG" />
+			<!-- <from id="_from1" uri="file:src/data?noop=true"/> -->
+			<!-- <from uri="timer://foo?fixedRate=true&amp;period=60000" /> <process 
+				id="_process1" ref="springManagedRequestProcesssor" /> -->
+			<to id="_to1"
+				uri="sap-srfc-destination:quickstartDest:ZSPS_GET_SERIAL_NUMBER" />
+			<log loggingLevel="INFO" id="_log1" message="${body}"
+				logName="com.oup.route" />
+			<process id="_process2" ref="springManagedResponseProcesssor" />
+		</route>
+	</camelContext>
+</beans>

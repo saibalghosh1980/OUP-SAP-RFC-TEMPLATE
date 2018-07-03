@@ -1,0 +1,26 @@
+<project name="RePackage" default="CREATE_JAR"
+	basedir="./target">
+	<property name="antBaseDir" location="./target" />
+	<property name="unzip.dir" location="${antBaseDir}/UNZIP" />
+	<target name="clean">
+		<delete dir="${antBaseDir}/UNZIP" />
+	</target>
+
+	<target name="UNJAR" depends="clean">
+		<echo message="------------> ${antBaseDir}" />
+		<unzip src="${antBaseDir}/SapRfcTemplate-0.0.1-SNAPSHOT.jar"
+			dest="${unzip.dir}">
+		</unzip>
+	</target>
+	<target name="RENAME_FILE" depends="UNJAR">
+		<rename src="${unzip.dir}/BOOT-INF/lib/sapidoc3-3.0.jar"
+			dest="${unzip.dir}/BOOT-INF/lib/sapidoc3.jar" />
+		<rename src="${unzip.dir}/BOOT-INF/lib/sapjco3-3.0.jar"
+			dest="${unzip.dir}/BOOT-INF/lib/sapjco3.jar" />
+	</target>
+	<target name="CREATE_JAR" depends="RENAME_FILE">
+		
+		<jar basedir="${unzip.dir}" manifest="${unzip.dir}/META-INF/MANIFEST.MF"
+			destfile="${antBaseDir}/SapRfcTemplate-0.0.1-SNAPSHOT.jar" />
+	</target>
+</project>
