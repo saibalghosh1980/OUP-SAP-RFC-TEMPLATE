@@ -123,6 +123,29 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/sapliblinux</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/sapliblinux</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -142,27 +165,27 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<configuration>
 					<imageName>saprfctemplate</imageName>
-					<dockerDirectory>docker</dockerDirectory>					
+					<dockerDirectory>docker</dockerDirectory>
 					<resources>
 						<resource>
 							<targetPath>/</targetPath>
 							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>							
+							<include>${project.build.finalName}.jar</include>
 						</resource>
 						<resource>
 							<targetPath>/</targetPath>
 							<directory>${project.basedir}/src/sapliblinux</directory>
-							<include>sapidoc3.jar</include>							
+							<include>sapidoc3.jar</include>
 						</resource>
 						<resource>
 							<targetPath>/</targetPath>
 							<directory>${project.basedir}/src/sapliblinux</directory>
-							<include>sapjco3.jar</include>							
+							<include>sapjco3.jar</include>
 						</resource>
 						<resource>
 							<targetPath>/</targetPath>
 							<directory>${project.basedir}/src/sapliblinux</directory>
-							<include>libsapjco3.so</include>							
+							<include>libsapjco3.so</include>
 						</resource>
 					</resources>
 				</configuration>
